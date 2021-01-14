@@ -11,9 +11,8 @@ const LoginForm = () => {
     const router = useRouter()
 
     const onSubmit = (data) => {
-        auth.Login(data).then(() => {
-            router.push('/')
-        })
+        auth.Login(data);
+        router.push('/')
     }
 
     return (
