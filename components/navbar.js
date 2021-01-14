@@ -2,12 +2,21 @@ import React from "react";
 import {useState} from 'react'
 import {Transition} from "@headlessui/react";
 import {useAuth} from "../hooks/useAuth";
+import {firebase} from "../db/firebase";
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [isUserpanelOpen, setIsUserpanelOpen] = useState(false)
 
     const auth = useAuth();
+
+    function logOut(){
+        firebase.auth().signOut().then(() => {
+            console.log("Success")
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
 
     return (
         <div className="relative bg-white">
@@ -46,7 +55,7 @@ export const Navbar = () => {
                                         <div
                                             className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                                             <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                                                <a href="#"
+                                                <a href="/saveExercise"
                                                    className="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50">
                                                     <svg className="flex-shrink-0 h-6 w-6 text-green-600"
                                                          xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -65,6 +74,25 @@ export const Navbar = () => {
                                                         </p>
                                                     </div>
                                                 </a>
+                                                <a href="/listExercises"
+                                                   className="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50">
+                                                    <svg className="flex-shrink-0 h-6 w-6 text-green-600"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                         viewBox="0 0 24 24"
+                                                         stroke="currentColor" aria-hidden="true">
+                                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                                              strokeWidth="2"
+                                                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                    <div className="ml-4">
+                                                        <p className="text-base font-medium text-gray-900">
+                                                            Voir mon historique
+                                                        </p>
+                                                        <p className="mt-1 text-sm text-gray-500">
+                                                            Accédez à l'historique de vos entraînements.
+                                                        </p>
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +108,7 @@ export const Navbar = () => {
 
                     {!auth.user ? (
                         <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-                            <a href="#"
+                            <a href="/login"
                                className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
                                 Se connecter
                             </a>
@@ -134,9 +162,9 @@ export const Navbar = () => {
                                                           d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                                 </svg>
                                                 <div className="ml-4">
-                                                    <p className="text-base font-medium text-gray-900">
+                                                    <button onClick={logOut} className="text-base font-medium text-gray-900">
                                                         Déconnexion
-                                                    </p>
+                                                    </button>
                                                 </div>
                                             </a>
                                         </div>
