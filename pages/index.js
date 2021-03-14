@@ -10,7 +10,6 @@ export default function Home() {
 
     return (
         <>
-            <Navbar/>
             <div className='text-center pt-44 h-screen'>
                 <h1 className='text-7xl text-green-400'>EasyFit</h1>
                 <p className='text-lg pt-10 text-gray-800'>Votre compagnon sportif au quotidien.</p>

@@ -3,7 +3,6 @@ import React, {
     useEffect,
     useContext,
     createContext,
-    ReactNode,
 } from 'react';
 import {auth, db} from '../db/firebase';
 const authContext = createContext({ user: {} });
@@ -21,22 +20,20 @@ export const useAuth = () => {
 const useAuthProvider = () => {
     const [user, setUser] = useState(null);
 
-    const handleAuthStateChanged = (user) => {
-        setUser(user);
-        if (user) {
-            getUserAdditionalData(user);
+    const handleAuthStateChanged = (userData) => {
+        if (userData) {
+            getUserAdditionalData(userData.uid);
         }
     };
     useEffect(() => {
         const unsub = auth.onAuthStateChanged(handleAuthStateChanged);
-
         return () => unsub();
     }, []);
 
-    const getUserAdditionalData = (user) => {
+    const getUserAdditionalData = (userUid) => {
         return db
             .collection('users')
-            .doc(user.uid)
+            .doc(userUid)
             .get()
             .then((userData) => {
                 if (userData.data()) {
@@ -46,7 +43,7 @@ const useAuthProvider = () => {
     };
 
     const createUser = (user) => {
-        db
+        return db
             .collection('users')
             .doc(user.uid)
             .set(user)
@@ -62,30 +59,40 @@ const useAuthProvider = () => {
         return auth
             .createUserWithEmailAndPassword(email, password)
             .then((res) => {
-                createUser({uid: res.user.uid, email: email, pseudo: pseudo})
-            })
+                 return createUser({uid: res.user.uid, email: email, pseudo: pseudo})
+            }).then(() => console.log("User successfully created."))
             .catch((error) => {
                 return {error};
             });
     };
 
-    const Login = ({ email, password }) => {
-        auth
+    const login = ({ email, password }) => {
+        console.log("Login func")
+        return auth
             .signInWithEmailAndPassword(email, password)
             .then((response) => {
                 setUser(response.user);
-                getUserAdditionalData(response.user).then(r => console.log(r));
+                getUserAdditionalData(user).then(r => console.log(r));
                 return response.user;
-            })
+            }).then(() => console.log('Successfully logged in.'))
             .catch((error) => {
                 return { error };
             });
     };
 
+    const logOut = () => {
+        return auth.signOut().then(() => {
+            console.log("Successfully logged out.")
+            setUser(false)
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
 
     return {
         user,
         signUp,
-        Login
+        login,
+        logOut
     };
 }

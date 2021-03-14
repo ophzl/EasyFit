@@ -19,6 +19,7 @@
     "tailwindcss": "^2.0.2"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.2.1"
+    "@tailwindcss/forms": "^0.2.1",
+    "firebase-admin": "^9.4.2"
   }
 }

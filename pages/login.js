@@ -11,8 +11,9 @@ const LoginForm = () => {
     const router = useRouter()
 
     const onSubmit = (data) => {
-        auth.Login(data);
-        router.push('/')
+        console.log(data)
+        auth.login(data);
+        router.push('/').then(() => console.log('Successfully connected'))
     }
 
     return (
@@ -21,7 +22,6 @@ const LoginForm = () => {
                 <title>EasyFit - Se connecter</title>
             </Head>
             <main>
-                <Navbar/>
                 <div className="min-h-full flex items-center justify-center py-14 bg-gray-50 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-md w-full space-y-8">
                         <div>
